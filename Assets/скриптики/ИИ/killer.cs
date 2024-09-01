@@ -57,7 +57,7 @@ public class killer : MonoBehaviour
     void _4()
     {
 
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(2);
     }
     void _1()
     {

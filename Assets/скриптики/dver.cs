@@ -8,8 +8,7 @@ public class dver : MonoBehaviour
 {
     public Animator anim;
 
-    private bool InputQ = false;
-    private bool wait = false;
+    private bool Close;
     private Component JoJo;
     // Start is called before the first frame update
     void Start()
@@ -21,32 +20,33 @@ public class dver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && InputQ == false && wait == false)
-        {
-            OpenDoor();
-        }
-        if (Input.GetKeyDown(KeyCode.Q) && InputQ == true && wait == false)
-        {
-            CloseDoor();    
-        }
-
+       
         if (JoJo.GetComponent<JoJo>().dver == false)
             anim.SetBool("openin", false);
        
-
         if (JoJo.GetComponent<JoJo>().dver == true)
             anim.SetBool("openin", true);
-
-        
+    
     }
 
-    private void Wait() => wait = false;
+
+    public void OpenCloseDoor()
+    {
+        if(Close == false)
+        {
+            OpenDoor();
+            Close = true;
+        }
+        else
+        {
+            CloseDoor();
+            Close = false;
+        }
+    }
 
     public void OpenDoor()
     {
-        wait = true;
-        InputQ = true;
-        Invoke("Wait", 0.1f);
+
         JoJo.GetComponent<JoJo>().dver = true;
         if (JoJo.GetComponent<JoJo>().dver == false && JoJo.GetComponent<JoJo>().vent == false)
         {
@@ -67,9 +67,7 @@ public class dver : MonoBehaviour
     }
     public void CloseDoor()
     {
-        wait = true;
-        InputQ = false;
-        Invoke("Wait", 0.1f);
+
         JoJo.GetComponent<JoJo>().dver = false;
         if (JoJo.GetComponent<JoJo>().dver == false && JoJo.GetComponent<JoJo>().vent == false)
         {

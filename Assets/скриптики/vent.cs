@@ -5,9 +5,8 @@ using UnityEngine;
 public class vent : MonoBehaviour
 {
     public Animator anim;
+    private bool Close = false;
 
-    private bool wait = false;
-    private bool InputE = false;
     private Component JoJo;
     // Start is called before the first frame update
     void Start()
@@ -19,15 +18,7 @@ public class vent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && InputE == false && wait == false)
-        {
-            OpenVent();
-            
-        }
-        if(Input.GetKeyDown(KeyCode.E) && InputE == true && wait == false)
-        {
-            CloseVent();
-        }
+        
         if(JoJo.GetComponent<JoJo>().vent == true)
         {
             anim.SetBool("opening", true);
@@ -39,13 +30,25 @@ public class vent : MonoBehaviour
 
         
     }
-    private void Wait() => wait = false;
+
+    public void CloseOpenVent()
+    {
+        if (Close == false)
+        {
+            OpenVent();
+            Close = true;
+        }
+        else
+        {
+            CloseVent();
+            Close = false;
+        }
+ 
+    }
 
     public void OpenVent()
     {
-        wait = true;
-        InputE = true;
-        Invoke("Wait", 0.1f);
+
         JoJo.GetComponent<JoJo>().vent = true;
         if (JoJo.GetComponent<JoJo>().dver == false && JoJo.GetComponent<JoJo>().vent == false)
         {
@@ -66,9 +69,8 @@ public class vent : MonoBehaviour
     }
     public void CloseVent()
     {
-        wait = true;
-        InputE = false;
-        Invoke("Wait", 0.1f);
+
+
         JoJo.GetComponent<JoJo>().vent = false;
         if (JoJo.GetComponent<JoJo>().dver == false && JoJo.GetComponent<JoJo>().vent == false)
         {

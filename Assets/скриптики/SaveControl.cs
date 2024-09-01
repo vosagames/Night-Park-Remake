@@ -8,7 +8,7 @@ using YG;
 public class SaveControl : MonoBehaviour
 {
     [SerializeField] private GameObject ButtonNewGame, ButtonContinue;
-    [SerializeField] private TMP_Text textNumberNight;
+    [SerializeField] private TMP_Text textNumberNight, textNumberNight2;
     [SerializeField] private GameObject youWIN1, youWIN2, youWIN3;
     [SerializeField] private GameObject NewLevel1;
     private void OnEnable() => YandexGame.GetDataEvent += Load;
@@ -19,10 +19,7 @@ public class SaveControl : MonoBehaviour
 
     void Start()
     {
-        if(YandexGame.SDKEnabled == true)
-        {
-            Load();
-        }
+        Load();
     }
     public void _NextLevel()
     {
@@ -40,7 +37,7 @@ public class SaveControl : MonoBehaviour
         Level2 = YandexGame.savesData.Level2;
         Level3 = YandexGame.savesData.Level3;
         SaveNight.numberNight = YandexGame.savesData.NumberNight;
-        textNumberNight.text = textNumberNight.text + $" {SaveNight.numberNight}";
+        textNumberNight.text = textNumberNight2.text + $" {SaveNight.numberNight}";
         switch (SaveNight.numberNight)
         {
             case 1:

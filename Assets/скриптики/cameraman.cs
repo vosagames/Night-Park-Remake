@@ -27,6 +27,8 @@ public class cameraman : MonoBehaviour
 
     private bool InputSpace = false;
 
+    private bool Close = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,28 +36,17 @@ public class cameraman : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame222
-    public void Update()
+    public void CloseOpenCam()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(Close == false)
         {
-            if(wait == false && InputSpace == false)
-            {
-                OpenCam();
-                wait = true;
-                InputSpace = true;
-                Invoke("Wait", 1f);
-            }
+            OpenCam();
+            Close = true;
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        else
         {
-            if (wait == false && InputSpace == true)
-            {
-                CloseCam();
-                wait = true;
-                InputSpace = false;
-                Invoke("Wait", 1f);
-            }
+            CloseCam();
+            Close = false;
         }
     }
     void nazad()

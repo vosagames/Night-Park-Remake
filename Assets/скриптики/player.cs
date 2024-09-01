@@ -30,7 +30,38 @@ public class player : MonoBehaviour
     // Update is called once per fram
     void Update()
     {
-        if(Input.GetKey(KeyCode.A)) //  ну тут всё понятно
+        Vector3 mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, 100f))
+        {
+            if(Input.GetMouseButtonDown(0)) 
+            {
+                if(hit.collider.gameObject.CompareTag("ButtonDoor"))
+                {
+                    Component door = FindObjectOfType<dver>();
+                    door.GetComponent<dver>().OpenCloseDoor();
+                    Debug.Log("Door");
+                }
+                if(hit.collider.gameObject.CompareTag("ButtonVent"))
+                {
+                    Component _vent = FindObjectOfType<vent>();
+                    _vent.GetComponent<vent>().CloseOpenVent();
+                    Debug.Log("Vent");
+                }
+                if (hit.collider.gameObject.CompareTag("ButtonCam"))
+                {
+                    Component _cam = FindObjectOfType<cameraman>();
+                    _cam.GetComponent<cameraman>().CloseOpenCam();
+                    Debug.Log("Cam");
+                }
+            }
+        }
+   
+
+
+
+        if (Input.GetKey(KeyCode.A)) //  ну тут всё понятно
         {
             HeadMoveLeft();
         }
