@@ -6,10 +6,12 @@ public class CameraAudioControl : MonoBehaviour
 
     private void OnEnable()
     {
+        audioCamera = GetComponent<AudioSource>();
         audioCamera.Play();
     }
     private void OnDisable()
     {
+        audioCamera = GetComponent<AudioSource>();
         audioCamera.Stop();
     }
 }

@@ -12,9 +12,20 @@ public class player : MonoBehaviour
     private Transform minAngle, maxAngle;
     [SerializeField]
     private TMP_Text night;
+    [SerializeField]
+    private AudioSource ClickSound, CamSound;
 
     private bool RightMove = true;
     private bool LeftMove = true;
+    private Vector3 mousePos;
+
+    public bool LeftMoveButtonPress = false;
+    public bool RightMoveButtonPress = false;
+
+    public bool power = true;
+
+    private bool isTouch;
+    private Touch touch;
 
     private void Start()
     {
@@ -27,37 +38,66 @@ public class player : MonoBehaviour
         YandexGame.SaveProgress();
     }
 
+
+
     // Update is called once per fram
     void Update()
     {
-        Vector3 mousePos = Input.mousePosition;
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 100f))
+        if (YandexGame.EnvironmentData.isMobile)
         {
-            if(Input.GetMouseButtonDown(0)) 
+            if (Input.touchCount > 0)
             {
-                if(hit.collider.gameObject.CompareTag("ButtonDoor"))
+                touch = Input.GetTouch(0);
+                mousePos = touch.position;
+
+                // Проверяем, произошло ли касание
+                if (touch.phase == TouchPhase.Began)
                 {
-                    Component door = FindObjectOfType<dver>();
-                    door.GetComponent<dver>().OpenCloseDoor();
-                    Debug.Log("Door");
+                    Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, 100f))
+                    {
+                        Tap(hit);
+                        Debug.Log("Касание на мобильном устройстве");
+                    }
                 }
-                if(hit.collider.gameObject.CompareTag("ButtonVent"))
+                else if (touch.phase == TouchPhase.Ended)
                 {
-                    Component _vent = FindObjectOfType<vent>();
-                    _vent.GetComponent<vent>().CloseOpenVent();
-                    Debug.Log("Vent");
-                }
-                if (hit.collider.gameObject.CompareTag("ButtonCam"))
-                {
-                    Component _cam = FindObjectOfType<cameraman>();
-                    _cam.GetComponent<cameraman>().CloseOpenCam();
-                    Debug.Log("Cam");
+                    isTouch = false;
+                    Debug.Log($"{isTouch} палец оторван");
                 }
             }
         }
-   
+        else if (YandexGame.EnvironmentData.isDesktop)
+        {
+            mousePos = Input.mousePosition;
+
+            // Проверяем, произошло ли нажатие мыши
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100f))
+                {
+                    Tap(hit);
+                    Debug.Log("Клик на десктопе");
+                }
+            }
+        }
+
+
+
+        if (LeftMoveButtonPress == true)
+        {
+            HeadMoveLeft();
+        }
+
+        if (RightMoveButtonPress == true)
+        {
+            HeadMoveRight();
+        }
 
 
 
@@ -65,7 +105,7 @@ public class player : MonoBehaviour
         {
             HeadMoveLeft();
         }
-        if(Input.GetKey(KeyCode.D)) // точно такой же метод как и прошлые но немного отличается
+        if (Input.GetKey(KeyCode.D)) // точно такой же метод как и прошлые но немного отличается
         {
             HeadMoveRight();
         }
@@ -90,16 +130,52 @@ public class player : MonoBehaviour
     }
     public void HeadMoveRight()
     {
-        if(RightMove == true)
+        if (RightMove == true)
         {
             gameObject.transform.Rotate(0, speed * Time.deltaTime, 0);
         }
     }
-    public void HeadMoveLeft() 
+    public void HeadMoveLeft()
     {
         if (LeftMove == true)
         {
             gameObject.transform.Rotate(0, -speed * Time.deltaTime, 0);
         }
     }
+    private void Tap(RaycastHit hit)
+    {
+        if (hit.collider.gameObject.CompareTag("ButtonDoor"))
+        {
+            ClickSound.Play();
+            if (power == true)
+            {
+                Component door = FindObjectOfType<dver>();
+                door.GetComponent<dver>().OpenCloseDoor();
+                Debug.Log("Door");
+            }
+        }
+        if (hit.collider.gameObject.CompareTag("ButtonVent"))
+        {
+            ClickSound.Play();
+            if (power == true)
+            {
+                Component _vent = FindObjectOfType<vent>();
+                _vent.GetComponent<vent>().CloseOpenVent();
+                Debug.Log("Vent");
+            }
+
+        }
+        if (hit.collider.gameObject.CompareTag("ButtonCam"))
+        {
+            CamSound.Play();
+            if (power == true)
+            {
+                Component _cam = FindObjectOfType<cameraman>();
+                _cam.GetComponent<cameraman>().CloseOpenCam();
+                Debug.Log("Cam");
+            }
+
+        }
+    }
 }
+    

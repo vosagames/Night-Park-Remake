@@ -10,9 +10,11 @@ public class dver : MonoBehaviour
 
     private bool Close;
     private Component JoJo;
+    [SerializeField] private AudioSource doorSound;
     // Start is called before the first frame update
     void Start()
     {
+        doorSound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         JoJo = FindAnyObjectByType<JoJo>();
     }
@@ -34,11 +36,13 @@ public class dver : MonoBehaviour
     {
         if(Close == false)
         {
+            doorSound.Play();
             OpenDoor();
             Close = true;
         }
         else
         {
+            doorSound.Play();
             CloseDoor();
             Close = false;
         }

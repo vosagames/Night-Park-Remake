@@ -7,6 +7,9 @@ using Unity.VisualScripting;
 
 public class cameraman : MonoBehaviour
 {
+
+    [SerializeField]  private GameObject CanvasInput, AudioForCamera;
+
     public Animator anim;
     public GameObject player;
     public GameObject camerascene;
@@ -55,12 +58,15 @@ public class cameraman : MonoBehaviour
     }
     void cameraactiv()
     {
+        AudioForCamera.SetActive(true);
         GameObject _control = FindObjectOfType<control>().gameObject;
         _control.GetComponent<control>().CamMenu(value);
         Canvas.SetActive(true);
     }
     public void CloseCam()
     {
+        AudioForCamera.SetActive(false);
+        CanvasInput.SetActive(true);
         Canvas.SetActive(false);
         camerascene.SetActive(false);
         cam1.SetActive(false);
@@ -92,6 +98,7 @@ public class cameraman : MonoBehaviour
     }
     public void OpenCam()
     {
+        CanvasInput.SetActive(false);
         anim.SetBool("cameraon", true);
         player.SetActive(false);
         Invoke("cameraactiv", 1.001f);

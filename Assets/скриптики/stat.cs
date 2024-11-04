@@ -16,6 +16,9 @@ public class stat : MonoBehaviour
     public TMP_Text cifri;
     private Component JoJo;
     [SerializeField] private TMP_Text energyYG;
+    [SerializeField] private GameObject Light;
+    [SerializeField] private AudioSource SoundPowerOff;
+    [SerializeField] private GameObject BlackDisplay;
 
  
 
@@ -55,13 +58,43 @@ public class stat : MonoBehaviour
             {
                 procent1.SetActive(false);
                 minus = 0;
-
+                LightOff();
+                Component Camera = FindObjectOfType<cameraman>();
+                Camera.GetComponent<cameraman>().CloseCam();
+                Component Player = FindObjectOfType<player>();
+                if(Player == null)
+                {
+                    Invoke("PlayerPowerFalse", 1.001f);
+                }
+                else
+                {
+                    Player.GetComponent<player>().power = false;
+                }
+                Invoke("PlayerPowerFalse", 1.001f);
+                Component Door = FindObjectOfType<dver>();
+                Door.GetComponent<dver>().CloseDoor();
+                Component Vent = FindObjectOfType<vent>();
+                Vent.GetComponent<vent>().CloseVent();
+                StopAllCoroutines();
             }
 
 
         }
        
     }
+
+    private void PlayerPowerFalse()
+    {
+        Component Player = FindObjectOfType<player>();
+        Player.GetComponent<player>().power = false;
+    }
+    private void LightOff()
+    {
+        Destroy(Light);
+        SoundPowerOff.Play();
+        BlackDisplay.SetActive(true);
+    }
+
 }
 
 

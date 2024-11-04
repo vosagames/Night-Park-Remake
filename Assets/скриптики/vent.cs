@@ -6,11 +6,14 @@ public class vent : MonoBehaviour
 {
     public Animator anim;
     private bool Close = false;
+    [SerializeField] private AudioSource ventSound;
+
 
     private Component JoJo;
     // Start is called before the first frame update
     void Start()
     {
+        ventSound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         JoJo = FindAnyObjectByType<JoJo>();
     }
@@ -35,11 +38,13 @@ public class vent : MonoBehaviour
     {
         if (Close == false)
         {
+            ventSound.Play();
             OpenVent();
             Close = true;
         }
         else
         {
+            ventSound.Play();
             CloseVent();
             Close = false;
         }
